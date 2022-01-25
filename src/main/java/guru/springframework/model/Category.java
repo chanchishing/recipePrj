@@ -10,7 +10,7 @@ public class Category {
     private Long Id;
     private String description;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "categories")
     private Set<Recipe> recipes;
 
     public Long getId() {
