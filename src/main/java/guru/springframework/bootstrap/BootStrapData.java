@@ -4,6 +4,7 @@ package guru.springframework.bootstrap;
 import guru.springframework.model.Difficulty;
 import guru.springframework.model.Ingredient;
 import guru.springframework.model.Recipe;
+import guru.springframework.model.UnitOfMeasure;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
@@ -11,6 +12,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Component
@@ -20,10 +23,24 @@ public class BootStrapData implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
 
+    private UnitOfMeasure count;
+    private UnitOfMeasure teaspoon;
+    private UnitOfMeasure tablespoon;
+    private UnitOfMeasure pinch;
+
     public BootStrapData(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
+
+    }
+
+    private void initUOMs() {
+        this.count=unitOfMeasureRepository.findByDescription("").get();
+        this.teaspoon=unitOfMeasureRepository.findByDescription("Teaspoon").get();
+        this.tablespoon=unitOfMeasureRepository.findByDescription("Tablespoon").get();
+        this.pinch=unitOfMeasureRepository.findByDescription("Pinch").get();
+
     }
 
     private Recipe initGuacamole() {
@@ -39,21 +56,21 @@ public class BootStrapData implements CommandLineRunner {
         guacamole.getCategories().add(categoryRepository.findByDescription("Mexican").get());
         guacamole.getCategories().add(categoryRepository.findByDescription("American").get());
 
+        Set<Ingredient> ingredients = new HashSet<Ingredient>() {{
+            add(new Ingredient("avocado",new BigDecimal("2.0"),count,guacamole));
+            add(new Ingredient("salt",new BigDecimal("0.25"),teaspoon,guacamole));
+            add(new Ingredient("fresh lime or lemon juice",new BigDecimal("1.0"),tablespoon,guacamole));
+            add(new Ingredient("minced red onion or thinly sliced green onion",new BigDecimal("4.0"),tablespoon,guacamole));
+            add(new Ingredient("serrano chilis, stems and seeds removed, minced",new BigDecimal("2.0"),count,guacamole));
+            add(new Ingredient("cilantro,finely chopped",new BigDecimal("2.0"),tablespoon,guacamole));
+            add(new Ingredient("freshly ground black pepper",new BigDecimal("1.0"),pinch,guacamole));
+            add(new Ingredient("ripe tomato, chopped",new BigDecimal("0.5"),count,guacamole));
+            add(new Ingredient("Red radish or jicama slices",BigDecimal.ZERO,count,guacamole));
+            add(new Ingredient("Tortilla chips",BigDecimal.ZERO,count,guacamole));
 
+        }};
 
-        Ingredient gIngredient1= new Ingredient();
-        gIngredient1.setDescription("avocado");
-        gIngredient1.setAmount(new BigDecimal("2.0"));
-        gIngredient1.setUom(unitOfMeasureRepository.findByDescription("").get());
-        gIngredient1.setRecipe(guacamole);
-        guacamole.getIngredients().add(gIngredient1);
-
-        Ingredient gIngredient2= new Ingredient();
-        gIngredient2.setDescription("salt");
-        gIngredient2.setAmount(new BigDecimal("0.5"));
-        gIngredient2.setUom(unitOfMeasureRepository.findByDescription("Teaspoon").get());
-        gIngredient2.setRecipe(guacamole);
-        guacamole.getIngredients().add(gIngredient2);
+        guacamole.setIngredients(ingredients);
 
         return guacamole;
     }
@@ -62,7 +79,7 @@ public class BootStrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Started in Bootstrap");
 
-
+        initUOMs();
         recipeRepository.save(initGuacamole());
 
         Recipe spicyGCTacos = new Recipe();
@@ -75,19 +92,19 @@ public class BootStrapData implements CommandLineRunner {
         spicyGCTacos.getCategories().add(categoryRepository.findByDescription("Mexican").get());
         //spicyGCTacos.getCategories().add(categoryRepository.findByDescription("American").get());
 
-        Ingredient sGCTIngredient1= new Ingredient();
-        sGCTIngredient1.setDescription("ancho chili powder");
-        sGCTIngredient1.setAmount(new BigDecimal(2));
-        sGCTIngredient1.setUom(unitOfMeasureRepository.findByDescription("Tablespoon").get());
-        sGCTIngredient1.setRecipe(spicyGCTacos);
-        spicyGCTacos.getIngredients().add(sGCTIngredient1);
+        //Ingredient sGCTIngredient1= new Ingredient();
+        //sGCTIngredient1.setDescription("ancho chili powder");
+        //sGCTIngredient1.setAmount(new BigDecimal(2));
+        //sGCTIngredient1.setUom(unitOfMeasureRepository.findByDescription("Tablespoon").get());
+        //sGCTIngredient1.setRecipe(spicyGCTacos);
+        //spicyGCTacos.getIngredients().add(sGCTIngredient1);
 
-        Ingredient sGCTIngredient2= new Ingredient();
-        sGCTIngredient2.setDescription("dried oregano");
-        sGCTIngredient2.setAmount(new BigDecimal(1));
-        sGCTIngredient2.setUom(unitOfMeasureRepository.findByDescription("Teaspoon").get());
-        sGCTIngredient2.setRecipe(spicyGCTacos);
-        spicyGCTacos.getIngredients().add(sGCTIngredient2);
+        //Ingredient sGCTIngredient2= new Ingredient();
+        //sGCTIngredient2.setDescription("dried oregano");
+        //sGCTIngredient2.setAmount(new BigDecimal(1));
+        //sGCTIngredient2.setUom(unitOfMeasureRepository.findByDescription("Teaspoon").get());
+        //sGCTIngredient2.setRecipe(spicyGCTacos);
+        //spicyGCTacos.getIngredients().add(sGCTIngredient2);
 
         recipeRepository.save(spicyGCTacos);
 
