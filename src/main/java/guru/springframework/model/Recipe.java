@@ -1,7 +1,6 @@
 package guru.springframework.model;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -133,6 +132,7 @@ public class Recipe {
 
     public void setNotes(Notes notes) {
         this.notes = notes;
+        notes.setRecipe(this);
     }
 
     public Set<Category> getCategories() {
@@ -148,8 +148,4 @@ public class Recipe {
         this.ingredients.add(ingredient);
     }
 
-    public void addNotes(Notes notes) {
-        notes.setRecipe(this);
-        this.setNotes(notes);
-    }
 }

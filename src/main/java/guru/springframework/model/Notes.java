@@ -38,11 +38,4 @@ public class Notes {
         this.recipeNotes = recipeNotes;
     }
 
-    public Notes() {
-    }
-
-    public Notes(String recipeNotes) {
-        this.recipeNotes = recipeNotes;
-    }
-
 }
