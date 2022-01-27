@@ -18,10 +18,6 @@ public class Notes {
         return id;
     }
 
-    public Notes(String recipeNotes) {
-        this.recipeNotes = recipeNotes;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -39,6 +35,13 @@ public class Notes {
     }
 
     public void setRecipeNotes(String recipeNotes) {
+        this.recipeNotes = recipeNotes;
+    }
+
+    public Notes() {
+    }
+
+    public Notes(String recipeNotes) {
         this.recipeNotes = recipeNotes;
     }
 
