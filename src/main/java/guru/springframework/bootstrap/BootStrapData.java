@@ -9,8 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Component
@@ -68,28 +66,23 @@ public class BootStrapData implements CommandLineRunner {
                 "4 Cover with plastic and chill to store: Place plastic wrap on the surface of the guacamole cover it and to prevent air reaching it. (The oxygen in the air causes oxidation which will turn the guacamole brown.) Refrigerate until ready to serve.\n" +
                 "Chilling tomatoes hurts their flavor, so if you want to add chopped tomato to your guacamole, add it just before serving.");
 
-        guacamole.getNotes().setRecipeNotes("For a very quick guacamole just take a 1/4 cup of salsa and mix it in with your mashed avocados.\n" +
+        guacamole.addNotes(new Notes("For a very quick guacamole just take a 1/4 cup of salsa and mix it in with your mashed avocados.\n" +
                                             "Feel free to experiment! One classic Mexican guacamole has pomegranate seeds and chunks of peaches in it (a Diana Kennedy favorite). Try guacamole with added pineapple, mango, or strawberries.\n" +
                                             "The simplest version of guacamole is just mashed avocados with salt. Don't let the lack of availability of other ingredients stop you from making guacamole.\n" +
                                             "To extend a limited supply of avocados, add either sour cream or cottage cheese to your guacamole dip. Purists may be horrified, but so what? It tastes great.\n"
-        );
-        guacamole.getNotes().setRecipe(guacamole);
+        ));
+        //guacamole.getNotes().setRecipe(guacamole);
 
-        Set<Ingredient> ingredients = new HashSet<>() {{
-            add(new Ingredient("avocado",new BigDecimal("2.0"),count,guacamole));
-            add(new Ingredient("salt",new BigDecimal("0.25"),teaspoon,guacamole));
-            add(new Ingredient("fresh lime or lemon juice",new BigDecimal("1.0"),tablespoon,guacamole));
-            add(new Ingredient("minced red onion or thinly sliced green onion",new BigDecimal("4.0"),tablespoon,guacamole));
-            add(new Ingredient("serrano chilis, stems and seeds removed, minced",new BigDecimal("2.0"),count,guacamole));
-            add(new Ingredient("cilantro,finely chopped",new BigDecimal("2.0"),tablespoon,guacamole));
-            add(new Ingredient("freshly ground black pepper",new BigDecimal("1.0"),pinch,guacamole));
-            add(new Ingredient("ripe tomato, chopped",new BigDecimal("0.5"),count,guacamole));
-            add(new Ingredient("Red radish or jicama slices",BigDecimal.ZERO,count,guacamole));
-            add(new Ingredient("Tortilla chips",BigDecimal.ZERO,count,guacamole));
-
-        }};
-
-        guacamole.setIngredients(ingredients);
+        guacamole.addIngredient(new Ingredient("avocado",new BigDecimal("2.0"),count));
+        guacamole.addIngredient(new Ingredient("salt",new BigDecimal("0.25"),teaspoon));
+        guacamole.addIngredient(new Ingredient("fresh lime or lemon juice",new BigDecimal("1.0"),tablespoon));
+        guacamole.addIngredient(new Ingredient("minced red onion or thinly sliced green onion",new BigDecimal("4.0"),tablespoon));
+        guacamole.addIngredient(new Ingredient("serrano chilis, stems and seeds removed, minced",new BigDecimal("2.0"),count));
+        guacamole.addIngredient(new Ingredient("cilantro,finely chopped",new BigDecimal("2.0"),tablespoon));
+        guacamole.addIngredient(new Ingredient("freshly ground black pepper",new BigDecimal("1.0"),pinch));
+        guacamole.addIngredient(new Ingredient("ripe tomato, chopped",new BigDecimal("0.5"),count));
+        guacamole.addIngredient(new Ingredient("Red radish or jicama slices",BigDecimal.ZERO,count));
+        guacamole.addIngredient(new Ingredient("Tortilla chips",BigDecimal.ZERO,count));
 
         return guacamole;
     }
@@ -116,34 +109,31 @@ public class BootStrapData implements CommandLineRunner {
                                    "Wrap warmed tortillas in a tea towel to keep them warm until serving.\n" +
                                    "5 Assemble the tacos: Slice the chicken into strips. On each tortilla, place a small handful of arugula. Top with chicken slices, sliced avocado, radishes, tomatoes, and onion slices. Drizzle with the thinned sour cream. Serve with lime wedges.\n");
 
-        spicyGCTacos.getNotes().setRecipeNotes("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
-                                               "Any and every kind of leftover can go inside a warm tortilla, usually with a healthy dose of pickled jalapenos. I can always sniff out a late-night snacker when the aroma of tortillas heating in a hot pan on the stove comes wafting through the house.\n" +
-                                               "Today’s tacos are more purposeful – a deliberate meal instead of a secretive midnight snack!\n" +
-                                               "First, I marinate the chicken briefly in a spicy paste of ancho chile powder, oregano, cumin, and sweet orange juice while the grill is heating. You can also use this time to prepare the taco toppings.\n" +
-                                               "Grill the chicken, then let it rest while you warm the tortillas. Now you are ready to assemble the tacos and dig in. The whole meal comes together in about 30 minutes!\n");
-        spicyGCTacos.getNotes().setRecipe(spicyGCTacos);
+        spicyGCTacos.addNotes(new Notes("We have a family motto and it is this: Everything goes better in a tortilla.\n" +
+                                                  "Any and every kind of leftover can go inside a warm tortilla, usually with a healthy dose of pickled jalapenos. I can always sniff out a late-night snacker when the aroma of tortillas heating in a hot pan on the stove comes wafting through the house.\n" +
+                                                  "Today’s tacos are more purposeful – a deliberate meal instead of a secretive midnight snack!\n" +
+                                                  "First, I marinate the chicken briefly in a spicy paste of ancho chile powder, oregano, cumin, and sweet orange juice while the grill is heating. You can also use this time to prepare the taco toppings.\n" +
+                                                  "Grill the chicken, then let it rest while you warm the tortillas. Now you are ready to assemble the tacos and dig in. The whole meal comes together in about 30 minutes!\n"
+        ));
 
-        Set<Ingredient> ingredients = new HashSet<>() {{
-            add(new Ingredient("ancho chili powder",new BigDecimal("2.0"),tablespoon,spicyGCTacos));
-            add(new Ingredient("dired oregano",new BigDecimal("1.0"),teaspoon,spicyGCTacos));
-            add(new Ingredient("dired cumin",new BigDecimal("1.0"),teaspoon,spicyGCTacos));
-            add(new Ingredient("sugar",new BigDecimal("1.0"),teaspoon,spicyGCTacos));
-            add(new Ingredient("salt",new BigDecimal("0.5"),teaspoon,spicyGCTacos));
-            add(new Ingredient("clove garlic",new BigDecimal("1.0"),count,spicyGCTacos));
-            add(new Ingredient("orange zest",new BigDecimal("1.0"),tablespoon,spicyGCTacos));
-            add(new Ingredient("small tortillas",new BigDecimal("8.0"),count,spicyGCTacos));
-            add(new Ingredient("packed baby arugula",new BigDecimal("3.0"),ounce,spicyGCTacos));
-            add(new Ingredient("medium ripe avocado",new BigDecimal("2.0"),ounce,spicyGCTacos));
-            add(new Ingredient("radish thinly sliced",new BigDecimal("4.0"),count,spicyGCTacos));
-            add(new Ingredient("cherry tomato halved",new BigDecimal("0.5"),pint,spicyGCTacos));
-            add(new Ingredient("red onion",new BigDecimal("0.25"),count,spicyGCTacos));
-            add(new Ingredient("roughly chopped cilantro",BigDecimal.ZERO,count,spicyGCTacos));
-            add(new Ingredient("sour cream",new BigDecimal("0.5"),cup,spicyGCTacos));
-            add(new Ingredient("milk",new BigDecimal("0.25"),cup,spicyGCTacos));
-            add(new Ingredient("lime wedges",new BigDecimal("1.0"),count,spicyGCTacos));
-        }};
 
-        spicyGCTacos.setIngredients(ingredients);
+        spicyGCTacos.addIngredient(new Ingredient("ancho chili powder",new BigDecimal("2.0"),tablespoon));
+        spicyGCTacos.addIngredient(new Ingredient("dired oregano",new BigDecimal("1.0"),teaspoon));
+        spicyGCTacos.addIngredient(new Ingredient("dired cumin",new BigDecimal("1.0"),teaspoon));
+        spicyGCTacos.addIngredient(new Ingredient("sugar",new BigDecimal("1.0"),teaspoon));
+        spicyGCTacos.addIngredient(new Ingredient("salt",new BigDecimal("0.5"),teaspoon));
+        spicyGCTacos.addIngredient(new Ingredient("clove garlic",new BigDecimal("1.0"),count));
+        spicyGCTacos.addIngredient(new Ingredient("orange zest",new BigDecimal("1.0"),tablespoon));
+        spicyGCTacos.addIngredient(new Ingredient("small tortillas",new BigDecimal("8.0"),count));
+        spicyGCTacos.addIngredient(new Ingredient("packed baby arugula",new BigDecimal("3.0"),ounce));
+        spicyGCTacos.addIngredient(new Ingredient("medium ripe avocado",new BigDecimal("2.0"),ounce));
+        spicyGCTacos.addIngredient(new Ingredient("radish thinly sliced",new BigDecimal("4.0"),count));
+        spicyGCTacos.addIngredient(new Ingredient("cherry tomato halved",new BigDecimal("0.5"),pint));
+        spicyGCTacos.addIngredient(new Ingredient("red onion",new BigDecimal("0.25"),count));
+        spicyGCTacos.addIngredient(new Ingredient("roughly chopped cilantro",BigDecimal.ZERO,count));
+        spicyGCTacos.addIngredient(new Ingredient("sour cream",new BigDecimal("0.5"),cup));
+        spicyGCTacos.addIngredient(new Ingredient("milk",new BigDecimal("0.25"),cup));
+        spicyGCTacos.addIngredient(new Ingredient("lime wedges",new BigDecimal("1.0"),count));
 
         return spicyGCTacos;
     }

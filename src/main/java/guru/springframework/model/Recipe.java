@@ -1,6 +1,7 @@
 package guru.springframework.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class Recipe {
     private Byte[] image;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Notes notes = new Notes();
+    private Notes notes;
 
     @ManyToMany
     @JoinTable(name = "recipe_category",
@@ -140,5 +141,15 @@ public class Recipe {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public void addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+    }
+
+    public void addNotes(Notes notes) {
+        notes.setRecipe(this);
+        this.setNotes(notes);
     }
 }
