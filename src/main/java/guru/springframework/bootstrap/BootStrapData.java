@@ -5,12 +5,14 @@ import guru.springframework.model.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
-
+@Slf4j
 @Component
 public class BootStrapData implements CommandLineRunner {
 
@@ -140,15 +142,17 @@ public class BootStrapData implements CommandLineRunner {
         return spicyGCTacos;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        System.out.println("Started in Bootstrap");
-
+    @Transactional
+    private void doDBInit() {
         initUOMs();
         recipeRepository.save(initGuacamole());
         recipeRepository.save(initSpicyGCTacos());
+    }
 
-
+    @Override
+    public void run(String... args) throws Exception {
+        System.out.println("Started in Bootstrap");
+        doDBInit();
 
     }
 }
