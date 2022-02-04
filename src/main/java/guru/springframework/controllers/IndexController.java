@@ -12,11 +12,11 @@ import java.util.List;
 
 @Slf4j
 @Controller
-public class indexController {
+public class IndexController {
 
     private final RecipeService recipeService;
 
-    public indexController(RecipeService recipeService) {
+    public IndexController(RecipeService recipeService) {
         this.recipeService = recipeService;
     }
 
