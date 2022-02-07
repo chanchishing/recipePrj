@@ -8,15 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+
 
 class IndexControllerTest {
 
@@ -40,6 +45,12 @@ class IndexControllerTest {
     }
 
     @Test
+    void mvcTest() throws Exception{
+        MockMvc mockMvc= MockMvcBuilders.standaloneSetup(indexController).build();
+        mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
+    }
+
+    @Test
     void getIndexPage() {
 
         //given
@@ -54,13 +65,14 @@ class IndexControllerTest {
         //when
         String viewNameReturned=indexController.getIndexPage(model);
 
-        //then a) verify "index" is returned from indexController.getIndexPage()
+        //then
+        // (a) verify "index" is returned from indexController.getIndexPage()
         assertEquals("index",viewNameReturned);
 
-        //then b) check recipeService.getRecipeList() is called once
+        //then (b) check recipeService.getRecipeList() is called once
         verify(recipeService,times(1)).getRecipeList();
 
-        //then c) check model.addAttribute("recipes",<List>) is called once and 2 recipes is added
+        //then (c) check model.addAttribute("recipes",<List>) is called once and 2 recipes is added
         verify(model,times(1)).addAttribute(eq("recipes"),argumentCaptor.capture());
         List<Recipe> listInController = argumentCaptor.getValue();
         assertEquals(2,listInController.size());
