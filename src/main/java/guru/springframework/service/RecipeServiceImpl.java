@@ -19,7 +19,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getRecipeList(){
-        log.debug("I'm RecipeServiceImpl.");
+        log.debug("I'm RecipeServiceImpl.getRecipeList()");
         return (List<Recipe>) recipeRepository.findAll();
+    }
+
+    @Override
+    public Recipe getRecipe(Long id) {
+        return recipeRepository.findById(id).orElseThrow();
     }
 }
