@@ -11,5 +11,64 @@
 <body>
 <p>hello world this is show recipe!</p>
 <p th:text="${recipe.description}">Recipe Description</p>
+
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row my-3">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-white bg-primary">
+                    <p class="card-title" th:text="${recipe.description}">Dish Name</p>
+                </div>
+                <div class="card-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-white bg-primary">
+                    <p class="card-title">Ingredients</p>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li th:remove="all">Ingredient 1</li>
+                        <li th:remove="all">Ingredient 2</li>
+                        <li th:each="ingredient: ${recipe.ingredients}"
+                                    th:text="'&nbsp' + ${ingredient.amount.toString()} + ' ' +
+                                             ${ingredient.uom.description} + ' ' +
+                                             ${ingredient.description}"/>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-white bg-primary">
+                    <p class="card-title">Directions</p>
+                </div>
+                <div class="card-body">
+                    <p th:text="${recipe.directions}">Directions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row my-3">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header text-white bg-primary">
+                    <p class="card-title">Notes</p>
+                </div>
+                <div class="card-body">
+                    <p th:text="${recipe.notes.recipeNotes}">Notes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>

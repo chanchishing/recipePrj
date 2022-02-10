@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 @Entity
 public class Ingredient {
 
+    public Ingredient() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
