@@ -9,24 +9,88 @@
 
 </head>
 <body>
-<p>hello world this is show recipe!</p>
-<p th:text="${recipe.description}">Recipe Description</p>
-
 <div class="container-fluid" style="margin-top: 20px">
     <div class="row my-3">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-sm-8 offset-sm-2">
             <div class="card">
                 <div class="card-header text-white bg-primary">
                     <p class="card-title" th:text="${recipe.description}">Dish Name</p>
                 </div>
                 <div class="card-body">
-
-                </div>
+                    <div class="row">
+                        <div class="col-auto">
+                            <strong>Categories:</strong>
+                        </div>
+                        <div class="col-auto">
+                            <ul>
+                                <li th:remove="all">Category 1</li>
+                                <li th:remove="all">Category 2</li>
+                                <li th:remove="all">Category 3</li>
+                                <li th:each="category: ${recipe.categories}"
+                                    th:text="'&nbsp' + ${category.description}"/>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="row py-1">
+                                <div class="col-5 col-lg-4">
+                                    <strong>Prep Time:</strong>
+                                </div>
+                                <div class="col-7 col-lg-8" th:text="${recipe.prepTime.toString()} + ' min(s)'">
+                                    30 mins
+                                </div>
+                            </div>
+                            <div class="row py-1">
+                                <div class="col-5 col-lg-4">
+                                    <strong>Cook Time:</strong>
+                                </div>
+                                <div class="col-7 col-lg-8" th:text="${recipe.cookTime.toString()} + ' min(s)'">
+                                    30 mins
+                                </div>
+                            </div>
+                            <div class="row py-1">
+                                <div class="col-5 col-lg-4">
+                                    <strong>Source:</strong>
+                                </div>
+                                <div class="col-7 col-lg-8" th:text="${recipe.source}">
+                                    source
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="row py-1">
+                                <div class="col-5 col-lg-4">
+                                    <strong>Difficulty:</strong>
+                                </div>
+                                <div class="col-7 col-lg-8" th:text="${recipe.difficulty}">
+                                    Easy
+                                </div>
+                            </div>
+                            <div class="row py-1">
+                                <div class="col-5 col-lg-4">
+                                    <strong>Servings:</strong>
+                                </div>
+                                <div class="col-7 col-lg-8" th:text="${recipe.servings.toString()}">
+                                    4
+                                </div>
+                            </div>
+                            <div class="row py-1">
+                                <div class="col-5 col-lg-4">
+                                    <strong>URL:</strong>
+                                </div>
+                                <div class="col-7 col-lg-8">
+                                    <a target="_blank" href="#" th:href="@{${recipe.url}}" th:text="${recipe.url}">http://www.example.com</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
             </div>
         </div>
     </div>
     <div class="row my-3">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-sm-8 offset-sm-2">
             <div class="card">
                 <div class="card-header text-white bg-primary">
                     <p class="card-title">Ingredients</p>
@@ -45,7 +109,7 @@
         </div>
     </div>
     <div class="row my-3">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-sm-8 offset-sm-2">
             <div class="card">
                 <div class="card-header text-white bg-primary">
                     <p class="card-title">Directions</p>
@@ -57,7 +121,7 @@
         </div>
     </div>
     <div class="row my-3">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-sm-8 offset-sm-2">
             <div class="card">
                 <div class="card-header text-white bg-primary">
                     <p class="card-title">Notes</p>
