@@ -1,7 +1,10 @@
 package guru.springframework.service;
 
+import guru.springframework.converters.RecipeCommandToRecipe;
+import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
+import org.h2.command.Command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,12 +25,21 @@ public class RecipeServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+
+    @Mock
+    RecipeCommandToRecipe commandToRecipe;
+
+    @Mock
+    RecipeToRecipeCommand recipeToCommand;
+
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         closeable=MockitoAnnotations.openMocks(this);
-        recipeService=new RecipeServiceImpl(recipeRepository);
+        recipeService= new RecipeServiceImpl(recipeRepository,
+                recipeToCommand,
+                commandToRecipe);
     }
 
     @AfterEach

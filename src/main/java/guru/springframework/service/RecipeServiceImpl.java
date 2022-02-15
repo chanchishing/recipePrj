@@ -1,9 +1,13 @@
 package guru.springframework.service;
 
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.converters.RecipeCommandToRecipe;
+import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -12,9 +16,17 @@ import java.util.List;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository recipeRepository;
+    private final RecipeToRecipeCommand recipeToCommand;
+    private final RecipeCommandToRecipe commandToRecipe;
 
-    public RecipeServiceImpl(RecipeRepository recipeRepository) {
+
+
+    public RecipeServiceImpl(RecipeRepository recipeRepository,
+                             RecipeToRecipeCommand recipeToCommand,
+                             RecipeCommandToRecipe commandToRecipe) {
         this.recipeRepository = recipeRepository;
+        this.recipeToCommand = recipeToCommand;
+        this.commandToRecipe = commandToRecipe;
     }
 
     @Override
@@ -26,5 +38,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public Recipe getRecipe(Long id) {
         return recipeRepository.findById(id).orElseThrow();
+    }
+
+    @Transactional
+    @Override
+    public RecipeCommand saveRecipe(RecipeCommand command) {
+        Recipe recipe=commandToRecipe.convert(command);
+        Recipe savedRecipe=recipeRepository.save(recipe);
+        return recipeToCommand.convert(savedRecipe);
     }
 }
