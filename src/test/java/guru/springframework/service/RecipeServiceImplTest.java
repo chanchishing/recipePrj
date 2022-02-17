@@ -1,10 +1,10 @@
 package guru.springframework.service;
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
-import org.h2.command.Command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,22 +24,22 @@ public class RecipeServiceImplTest {
     RecipeServiceImpl recipeService;
 
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeRepository mockRecipeRepository;
 
     @Mock
-    RecipeCommandToRecipe commandToRecipe;
+    RecipeCommandToRecipe mockCommandToRecipe;
 
     @Mock
-    RecipeToRecipeCommand recipeToCommand;
+    RecipeToRecipeCommand mockRecipeToCommand;
 
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         closeable=MockitoAnnotations.openMocks(this);
-        recipeService= new RecipeServiceImpl(recipeRepository,
-                recipeToCommand,
-                commandToRecipe);
+        recipeService= new RecipeServiceImpl(mockRecipeRepository,
+                mockRecipeToCommand,
+                mockCommandToRecipe);
     }
 
     @AfterEach
@@ -54,11 +54,11 @@ public class RecipeServiceImplTest {
         dummyRecipeList.add(dummyRecipe);
 
 
-        when(recipeRepository.findAll()).thenReturn(dummyRecipeList);
+        when(mockRecipeRepository.findAll()).thenReturn(dummyRecipeList);
 
         List<Recipe> recipeList=recipeService.getRecipeList();
         assertEquals(1,recipeList.size());
-        verify(recipeRepository,times(1)).findAll();
+        verify(mockRecipeRepository,times(1)).findAll();
     }
 
     @Test
@@ -69,13 +69,36 @@ public class RecipeServiceImplTest {
         recipe.setId(testId);
         Optional<Recipe> optionalRecipe=Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
+        when(mockRecipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
 
-        Optional<Recipe> resultRecipe=recipeRepository.findById(testId);
+        Optional<Recipe> resultRecipe= mockRecipeRepository.findById(testId);
 
         assertEquals(testId,optionalRecipe.get().getId());
         assertNotNull(optionalRecipe);
-        verify(recipeRepository,times(1)).findById(testId);
+        verify(mockRecipeRepository,times(1)).findById(testId);
+
+
+    }
+
+    @Test
+    void getRecipeCommandById() {
+        Long testId=1L;
+
+        Recipe recipe=new Recipe();
+        recipe.setId(testId);
+        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+
+        RecipeCommand command= new RecipeCommand();
+        command.setId(testId);
+
+        when(mockRecipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
+        when(mockRecipeToCommand.convert(any(Recipe.class))).thenReturn(command);
+
+        RecipeCommand resultCommand=recipeService.getRecipeCommandById(testId);
+
+        assertEquals(testId,resultCommand.getId());
+        assertNotNull(resultCommand);
+        verify(mockRecipeRepository,times(1)).findById(testId);
 
 
     }

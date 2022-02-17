@@ -27,6 +27,7 @@
                                 <th>Difficulty</th>
                                 <th>Preparation Time</th>
                                 <th>Cook Time</th>
+                                <th/>
                             </tr>
                             </thead>
                             <tr th:remove="all">
@@ -34,12 +35,14 @@
                                 <td th:text="${recipe.difficulty}">difficulty tbr</td>
                                 <td th:text="${recipe.prepTime}">prep time tbr</td>
                                 <td th:text="${recipe.cookTime}">cook time tbr</td>
+                                <td><a type="button" class="btn btn-primary">Update</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td th:text="${recipe.description}">description tbr2</td>
                                 <td th:text="${recipe.difficulty}">difficulty tbr</td>
                                 <td th:text="${recipe.prepTime}">prep time tbr</td>
                                 <td th:text="${recipe.cookTime}">cook time tbr</td>
+                                <td><a type="button" class="btn btn-primary">Update</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
                                 <!--td th:text="${recipe.description}">description</td-->
@@ -47,6 +50,7 @@
                                 <td th:text="${recipe.difficulty}">difficulty</td>
                                 <td th:text="${recipe.prepTime}">prep time</td>
                                 <td th:text="${recipe.cookTime}">cook time</td>
+                                <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${recipe.id} +'/update/'}" th:text="Update">Update</a></td>
                             </tr>
                         </table>
                     </div>
