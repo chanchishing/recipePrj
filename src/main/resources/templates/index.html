@@ -36,6 +36,7 @@
                                 <td th:text="${recipe.prepTime}">prep time tbr</td>
                                 <td th:text="${recipe.cookTime}">cook time tbr</td>
                                 <td><a type="button" class="btn btn-primary">Update</a></td>
+                                <td><a type="button" class="btn btn-primary">Delete</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td th:text="${recipe.description}">description tbr2</td>
@@ -43,6 +44,7 @@
                                 <td th:text="${recipe.prepTime}">prep time tbr</td>
                                 <td th:text="${recipe.cookTime}">cook time tbr</td>
                                 <td><a type="button" class="btn btn-primary">Update</a></td>
+                                <td><a type="button" class="btn btn-primary">Delete</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
                                 <!--td th:text="${recipe.description}">description</td-->
@@ -51,6 +53,7 @@
                                 <td th:text="${recipe.prepTime}">prep time</td>
                                 <td th:text="${recipe.cookTime}">cook time</td>
                                 <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${recipe.id} +'/update/'}" th:text="Update">Update</a></td>
+                                <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${recipe.id} +'/delete/'}" th:text="Delete">Delete</a></td>
                             </tr>
                         </table>
                     </div>

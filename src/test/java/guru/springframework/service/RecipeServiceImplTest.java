@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.transaction.annotation.Transactional;
 
 //import static org.junit.Assert.*;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import static org.mockito.Mockito.*;
 public class RecipeServiceImplTest {
 
     RecipeServiceImpl recipeService;
+    Long testId=1L;
+
 
     @Mock
     RecipeRepository mockRecipeRepository;
@@ -63,7 +66,7 @@ public class RecipeServiceImplTest {
 
     @Test
     void getRecipe() {
-        Long testId=1L;
+
 
         Recipe recipe= new Recipe();
         recipe.setId(testId);
@@ -82,7 +85,7 @@ public class RecipeServiceImplTest {
 
     @Test
     void getRecipeCommandById() {
-        Long testId=1L;
+
 
         Recipe recipe=new Recipe();
         recipe.setId(testId);
@@ -101,5 +104,13 @@ public class RecipeServiceImplTest {
         verify(mockRecipeRepository,times(1)).findById(testId);
 
 
+    }
+
+    @Test
+    void deleteRecipeById(){
+
+        recipeService.deleteRecipeById(testId);
+
+        verify(mockRecipeRepository,times(1)).deleteById(testId);
     }
 }

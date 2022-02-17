@@ -14,6 +14,7 @@
     <!--div class="row my-3"-->
         <form th:object="${recipe}" th:action="@{/recipe/}"  method="post">
             <input type="hidden" th:field="*{id}"/>
+            <input type="hidden" th:field="*{notes.id}"/>
             <div class="col-sm-8 offset-sm-2">
                 <div class="card">
                     <div class="card-header text-white bg-primary">
