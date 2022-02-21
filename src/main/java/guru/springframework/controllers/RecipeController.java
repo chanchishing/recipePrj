@@ -72,15 +72,6 @@ public class RecipeController {
         return "redirect:/";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/ingredients")
-    public String listIngredients(@PathVariable String id,Model model){
-        //RecipeCommand recipeCommand=recipeService.getRecipeCommandById(Long.valueOf(id));
-        //model.addAttribute("recipe", recipeCommand);
 
-        RecipeCommand recipeCommand=recipeService.getRecipeCommandById(Long.valueOf(id));
-        model.addAttribute("recipe", recipeCommand);
-        return "/recipe/ingredient/list";
-    }
 
 }

@@ -145,21 +145,4 @@ class RecipeControllerTest {
     }
 
 
-    @Test
-    void testListIngredients() throws Exception {
-
-        RecipeCommand recipeCommand = new RecipeCommand();
-        recipeCommand.setId(testIdLong);
-
-        when(mockRecipeService.getRecipeCommandById(testIdLong)).thenReturn(recipeCommand);
-
-        mockMvc.perform(get("/recipe/" + testIdStr + "/ingredients/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("/recipe/ingredient/list"))
-                .andExpect(model().attributeExists("recipe"));
-
-
-        verify(mockRecipeService, times(1)).getRecipeCommandById(testIdLong);
-
-    }
 }
