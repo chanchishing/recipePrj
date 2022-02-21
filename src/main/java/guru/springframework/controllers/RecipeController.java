@@ -1,6 +1,8 @@
 package guru.springframework.controllers;
 
 
+import com.sun.istack.NotNull;
+import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.service.RecipeService;
@@ -8,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -63,6 +70,17 @@ public class RecipeController {
         recipeService.deleteRecipeById(Long.valueOf(id));
         //model.addAttribute("recipe", recipeCommand);
         return "redirect:/";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{id}/ingredients")
+    public String listIngredients(@PathVariable String id,Model model){
+        //RecipeCommand recipeCommand=recipeService.getRecipeCommandById(Long.valueOf(id));
+        //model.addAttribute("recipe", recipeCommand);
+
+        RecipeCommand recipeCommand=recipeService.getRecipeCommandById(Long.valueOf(id));
+        model.addAttribute("recipe", recipeCommand);
+        return "/recipe/ingredient/list";
     }
 
 }

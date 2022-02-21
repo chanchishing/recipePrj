@@ -1,5 +1,6 @@
 package guru.springframework.controllers;
 
+import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.model.Recipe;
 import guru.springframework.service.RecipeServiceImpl;
@@ -13,6 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.*;
@@ -137,6 +141,25 @@ class RecipeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
                 //.andExpect(model().attributeExists("recipe"));
+
+    }
+
+
+    @Test
+    void testListIngredients() throws Exception {
+
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(testIdLong);
+
+        when(mockRecipeService.getRecipeCommandById(testIdLong)).thenReturn(recipeCommand);
+
+        mockMvc.perform(get("/recipe/" + testIdStr + "/ingredients/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/ingredient/list"))
+                .andExpect(model().attributeExists("recipe"));
+
+
+        verify(mockRecipeService, times(1)).getRecipeCommandById(testIdLong);
 
     }
 }
