@@ -5,6 +5,7 @@ import guru.springframework.model.Category;
 import guru.springframework.model.Ingredient;
 import guru.springframework.model.Recipe;
 import lombok.Synchronized;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -12,8 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
 
+
     private final CategoryToCategoryCommand categoryConverter;
+
     private final IngredientToIngredientCommand ingredientConverter;
+
     private final NotesToNotesCommand notesConverter;
 
     public RecipeToRecipeCommand(CategoryToCategoryCommand categoryConverter, IngredientToIngredientCommand ingredientConverter, NotesToNotesCommand notesConverter) {
