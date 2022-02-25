@@ -2,11 +2,15 @@ package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
+import guru.springframework.model.Recipe;
 import guru.springframework.service.IngredientServiceImpl;
 import guru.springframework.service.RecipeServiceImpl;
+import guru.springframework.service.UnitOfMeasureService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,10 +18,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class IngredientControllerTest {
@@ -38,6 +47,9 @@ class IngredientControllerTest {
     private IngredientServiceImpl mockIngredientService;
 
     @Mock
+    private UnitOfMeasureService mockUnitOfMeasureService;
+
+    @Mock
     private Model mockModel;
     private AutoCloseable closeable;
 
@@ -45,7 +57,7 @@ class IngredientControllerTest {
     @BeforeEach
     void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
-        ingredientController = new IngredientController(mockRecipeService,mockIngredientService);
+        ingredientController = new IngredientController(mockRecipeService,mockIngredientService,mockUnitOfMeasureService);
 
         testIdStr = "1";
         testIdLong = Long.valueOf(testIdStr);
@@ -92,5 +104,54 @@ class IngredientControllerTest {
                 .andExpect(model().attributeExists("ingredient"));
 
         verify(mockIngredientService, times(1)).findByRecipeIDAndIngredientId(testIdLong,testIngredientIdLong);
+    }
+
+    @Test
+    void loadIngredientToUpdate() throws Exception {
+        Long uom1TestId = 9L;
+        Long uom2TestId = 10L;
+
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setId(testIngredientIdLong);
+        ingredientCommand.setRecipeId(testIdLong);
+
+        UnitOfMeasureCommand uomCommand1 = new UnitOfMeasureCommand();
+        uomCommand1.setId(uom1TestId);
+        UnitOfMeasureCommand uomCommand2 = new UnitOfMeasureCommand();
+        uomCommand2.setId(uom2TestId);
+        Set<UnitOfMeasureCommand> uomTestList = new HashSet<UnitOfMeasureCommand>();
+        uomTestList.add(uomCommand1);
+        uomTestList.add(uomCommand2);
+
+
+        when(mockIngredientService.findByRecipeIDAndIngredientId(testIdLong, testIngredientIdLong)).thenReturn(ingredientCommand);
+        when(mockUnitOfMeasureService.getUomList()).thenReturn(uomTestList);
+
+
+        mockMvc.perform(get("/recipe/" + testIdStr + "/ingredients/" + testIngredientIdStr + "/update"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/ingredient/ingredientForm"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(model().attributeExists("uomList"));
+
+        verify(mockIngredientService, times(1)).findByRecipeIDAndIngredientId(testIdLong, testIngredientIdLong);
+        verify(mockUnitOfMeasureService, times(1)).getUomList();
+
+    }
+
+    @Test
+    void updateIngredient() throws Exception {
+
+        IngredientCommand mockSavedIngredient=new IngredientCommand();
+        mockSavedIngredient.setRecipeId(testIdLong);
+        mockSavedIngredient.setId(testIngredientIdLong);
+
+        when(mockIngredientService.saveIngredient(any(IngredientCommand.class))).thenReturn(mockSavedIngredient);
+
+        mockMvc.perform(post("/recipe/" + testIdStr + "/ingredient"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/recipe/" + testIdStr + "/ingredients/" + testIngredientIdStr + "/show"));
+
+
     }
 }
