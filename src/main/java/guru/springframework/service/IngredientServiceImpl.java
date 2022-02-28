@@ -83,9 +83,13 @@ public class IngredientServiceImpl implements IngredientService{
         );
 
         Recipe savedRecipe=recipeRepository.save(recipe);
+
         return ingredientToCommand.convert(
                 savedRecipe.getIngredients().stream().filter(
-                        ingredient -> ingredient.getId()==ingredientCommand.getId())
+                        ingredient -> ( ingredient.getRecipe().getId()==ingredientCommand.getRecipeId() &&
+                                        ingredient.getDescription()==ingredientCommand.getDescription() &&
+                                        ingredient.getAmount()==ingredientCommand.getAmount() &&
+                                        ingredient.getUom().getId()==ingredientCommand.getUom().getId()))
                         .findFirst().get()
                 );
     }

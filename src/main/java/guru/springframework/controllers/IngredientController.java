@@ -2,6 +2,8 @@ package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
+import guru.springframework.model.Recipe;
 import guru.springframework.service.IngredientService;
 import guru.springframework.service.RecipeService;
 import guru.springframework.service.UnitOfMeasureService;
@@ -9,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Controller
@@ -68,4 +72,26 @@ public class IngredientController {
 
     }
 
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredients/new")
+    public String loadIngredientFormToAdd(@PathVariable String recipeId, Model model) {
+
+        try {
+            Recipe recipe = recipeService.getRecipe(Long.valueOf(recipeId));
+        } catch (NoSuchElementException noSuchElementException) {
+            log.info("Recipe Not Found");
+            throw noSuchElementException;
+        } catch (Exception e) {
+            throw e;
+        }
+
+        IngredientCommand ingredientCommand=new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+        ingredientCommand.setUom(new UnitOfMeasureCommand());
+
+        model.addAttribute("ingredient", ingredientCommand);
+        model.addAttribute("uomList", unitOfMeasureService.getUomList());
+
+        return "/recipe/ingredient/ingredientForm";
+    }
 }

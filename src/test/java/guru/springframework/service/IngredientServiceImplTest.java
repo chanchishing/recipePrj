@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,11 +86,14 @@ class IngredientServiceImplTest {
         Long testRecipeId=11L;
         Long testIngredientId=3L;
         Long testUOMId=5L;
-        String testSavedIngredientDescription="new Ingredient Description";
+        BigDecimal testIngredientAmount= BigDecimal.valueOf(2.0);
+        String testIngredientDescription="test Ingredient Description";
 
         IngredientCommand ingredientCommand= new IngredientCommand();
         ingredientCommand.setId(testIngredientId);
         ingredientCommand.setRecipeId(testRecipeId);
+        ingredientCommand.setDescription(testIngredientDescription);
+        ingredientCommand.setAmount(testIngredientAmount);
         UnitOfMeasureCommand uomCommand=new UnitOfMeasureCommand();
         uomCommand.setId(testUOMId);
         ingredientCommand.setUom(uomCommand);
@@ -98,9 +102,15 @@ class IngredientServiceImplTest {
         Optional<UnitOfMeasure> uomOptional= Optional.of(new UnitOfMeasure());
 
         Recipe mockSavedRecipe =new Recipe();
+        mockSavedRecipe.setId(testRecipeId);
         Ingredient mockSavedIngredient = new Ingredient();
         mockSavedIngredient.setId(testIngredientId);
-        mockSavedIngredient.setDescription(testSavedIngredientDescription);
+        mockSavedIngredient.setRecipe(mockSavedRecipe);
+        mockSavedIngredient.setDescription(testIngredientDescription);
+        mockSavedIngredient.setAmount(testIngredientAmount);
+        UnitOfMeasure mockSavedUom=new UnitOfMeasure();
+        mockSavedUom.setId(testUOMId);
+        mockSavedIngredient.setUom(mockSavedUom);
         mockSavedRecipe.getIngredients().add(mockSavedIngredient);
 
 
@@ -111,7 +121,7 @@ class IngredientServiceImplTest {
         IngredientCommand resultCommand=ingredientService.saveIngredient(ingredientCommand);
 
         assertEquals(testIngredientId,resultCommand.getId());
-        assertEquals(testSavedIngredientDescription,resultCommand.getDescription());
+        assertEquals(testIngredientDescription,resultCommand.getDescription());
         verify(mockRecipeRepository,times(1)).findById(testRecipeId);
         verify(mockUomRepository,times(1)).findById(testUOMId);
         verify(mockRecipeRepository,times(1)).save(any(Recipe.class));

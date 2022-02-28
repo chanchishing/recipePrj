@@ -10,7 +10,6 @@ import guru.springframework.service.UnitOfMeasureService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,11 +18,13 @@ import org.springframework.ui.Model;
 
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasSize;
+
+
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -119,7 +120,7 @@ class IngredientControllerTest {
         uomCommand1.setId(uom1TestId);
         UnitOfMeasureCommand uomCommand2 = new UnitOfMeasureCommand();
         uomCommand2.setId(uom2TestId);
-        Set<UnitOfMeasureCommand> uomTestList = new HashSet<UnitOfMeasureCommand>();
+        Set<UnitOfMeasureCommand> uomTestList = new HashSet<>();
         uomTestList.add(uomCommand1);
         uomTestList.add(uomCommand2);
 
@@ -151,6 +152,37 @@ class IngredientControllerTest {
         mockMvc.perform(post("/recipe/" + testIdStr + "/ingredient"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/" + testIdStr + "/ingredients/" + testIngredientIdStr + "/show"));
+
+
+    }
+
+    @Test
+    void loadIngredientFormToAdd() throws Exception {
+        Long testRecipeId=1L;
+        Long uom1TestId = 9L;
+        Long uom2TestId = 10L;
+
+        UnitOfMeasureCommand uomCommand1 = new UnitOfMeasureCommand();
+        uomCommand1.setId(uom1TestId);
+        UnitOfMeasureCommand uomCommand2 = new UnitOfMeasureCommand();
+        uomCommand2.setId(uom2TestId);
+        Set<UnitOfMeasureCommand> uomTestList = new HashSet<>();
+        uomTestList.add(uomCommand1);
+        uomTestList.add(uomCommand2);
+
+        Recipe mockRecipe=new Recipe();
+        mockRecipe.setId(testRecipeId);
+
+        when(mockUnitOfMeasureService.getUomList()).thenReturn(uomTestList);
+        when(mockRecipeService.getRecipe(anyLong())).thenReturn(mockRecipe);
+
+        mockMvc.perform(get("/recipe/" + testIdStr + "/ingredients/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("/recipe/ingredient/ingredientForm"))
+                .andExpect(model().attributeExists("ingredient"))
+                .andExpect(model().attributeExists("uomList"))
+                .andExpect(model().attribute("ingredient",hasProperty("recipeId",is(testIdLong))))
+                .andExpect(model().attribute("uomList",hasSize(uomTestList.size())));
 
 
     }
