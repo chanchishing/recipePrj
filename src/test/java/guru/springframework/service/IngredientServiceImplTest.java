@@ -35,47 +35,46 @@ class IngredientServiceImplTest {
     @Mock
     UnitOfMeasureRepository mockUomRepository;
 
-    IngredientToIngredientCommand IngredientToCommand=new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
-    IngredientCommandToIngredient commandToIngredient=new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
+    IngredientToIngredientCommand IngredientToCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
+    IngredientCommandToIngredient commandToIngredient = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
 
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
-        closeable=MockitoAnnotations.openMocks(this);
-        ingredientService= new IngredientServiceImpl(mockRecipeRepository, mockUomRepository, IngredientToCommand, commandToIngredient);
+        closeable = MockitoAnnotations.openMocks(this);
+        ingredientService = new IngredientServiceImpl(mockRecipeRepository, mockUomRepository, IngredientToCommand, commandToIngredient);
     }
 
     @AfterEach
-    void tearDown() throws Exception{
+    void tearDown() throws Exception {
         closeable.close();
     }
 
     @Test
     void findByRecipeIDAndIngredientId() {
-        Long testRecipeId=1L;
-        Long testIngredientId=2L;
+        Long testRecipeId = 1L;
+        Long testIngredientId = 2L;
 
-        Recipe recipe=new Recipe();
+        Recipe recipe = new Recipe();
         recipe.setId(testRecipeId);
 
-        Ingredient ingredient=new Ingredient();
+        Ingredient ingredient = new Ingredient();
         ingredient.setId(testIngredientId);
         ingredient.setRecipe(recipe);
         recipe.getIngredients().add(ingredient);
-        Optional<Recipe> recipeOptional=Optional.of(recipe);
+        Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        IngredientCommand ingredientCommand=new IngredientCommand();
+        IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setRecipeId(testRecipeId);
         ingredientCommand.setId(testIngredientId);
 
         when(mockRecipeRepository.findById(any())).thenReturn(recipeOptional);
 
-        IngredientCommand command=ingredientService.findByRecipeIDAndIngredientId(testRecipeId,testIngredientId);
-        verify(mockRecipeRepository,times(1)).findById(testRecipeId);
-        assertEquals(testRecipeId,command.getRecipeId());
-        assertEquals(testIngredientId,command.getId());
-
+        IngredientCommand command = ingredientService.findByRecipeIDAndIngredientId(testRecipeId, testIngredientId);
+        verify(mockRecipeRepository, times(1)).findById(testRecipeId);
+        assertEquals(testRecipeId, command.getRecipeId());
+        assertEquals(testIngredientId, command.getId());
 
 
     }
@@ -83,32 +82,32 @@ class IngredientServiceImplTest {
     @Test
     void saveIngredient() {
 
-        Long testRecipeId=11L;
-        Long testIngredientId=3L;
-        Long testUOMId=5L;
-        BigDecimal testIngredientAmount= BigDecimal.valueOf(2.0);
-        String testIngredientDescription="test Ingredient Description";
+        Long testRecipeId = 11L;
+        Long testIngredientId = 3L;
+        Long testUOMId = 5L;
+        BigDecimal testIngredientAmount = BigDecimal.valueOf(2.0);
+        String testIngredientDescription = "test Ingredient Description";
 
-        IngredientCommand ingredientCommand= new IngredientCommand();
+        IngredientCommand ingredientCommand = new IngredientCommand();
         ingredientCommand.setId(testIngredientId);
         ingredientCommand.setRecipeId(testRecipeId);
         ingredientCommand.setDescription(testIngredientDescription);
         ingredientCommand.setAmount(testIngredientAmount);
-        UnitOfMeasureCommand uomCommand=new UnitOfMeasureCommand();
+        UnitOfMeasureCommand uomCommand = new UnitOfMeasureCommand();
         uomCommand.setId(testUOMId);
         ingredientCommand.setUom(uomCommand);
 
-        Optional<Recipe> recipeOptional= Optional.of(new Recipe());
-        Optional<UnitOfMeasure> uomOptional= Optional.of(new UnitOfMeasure());
+        Optional<Recipe> recipeOptional = Optional.of(new Recipe());
+        Optional<UnitOfMeasure> uomOptional = Optional.of(new UnitOfMeasure());
 
-        Recipe mockSavedRecipe =new Recipe();
+        Recipe mockSavedRecipe = new Recipe();
         mockSavedRecipe.setId(testRecipeId);
         Ingredient mockSavedIngredient = new Ingredient();
         mockSavedIngredient.setId(testIngredientId);
         mockSavedIngredient.setRecipe(mockSavedRecipe);
         mockSavedIngredient.setDescription(testIngredientDescription);
         mockSavedIngredient.setAmount(testIngredientAmount);
-        UnitOfMeasure mockSavedUom=new UnitOfMeasure();
+        UnitOfMeasure mockSavedUom = new UnitOfMeasure();
         mockSavedUom.setId(testUOMId);
         mockSavedIngredient.setUom(mockSavedUom);
         mockSavedRecipe.getIngredients().add(mockSavedIngredient);
@@ -118,13 +117,35 @@ class IngredientServiceImplTest {
         when(mockUomRepository.findById(anyLong())).thenReturn(uomOptional);
         when(mockRecipeRepository.save(any(Recipe.class))).thenReturn(mockSavedRecipe);
 
-        IngredientCommand resultCommand=ingredientService.saveIngredient(ingredientCommand);
+        IngredientCommand resultCommand = ingredientService.saveIngredient(ingredientCommand);
 
-        assertEquals(testIngredientId,resultCommand.getId());
-        assertEquals(testIngredientDescription,resultCommand.getDescription());
-        verify(mockRecipeRepository,times(1)).findById(testRecipeId);
-        verify(mockUomRepository,times(1)).findById(testUOMId);
-        verify(mockRecipeRepository,times(1)).save(any(Recipe.class));
+        assertEquals(testIngredientId, resultCommand.getId());
+        assertEquals(testIngredientDescription, resultCommand.getDescription());
+        verify(mockRecipeRepository, times(1)).findById(testRecipeId);
+        verify(mockUomRepository, times(1)).findById(testUOMId);
+        verify(mockRecipeRepository, times(1)).save(any(Recipe.class));
 
     }
+
+    @Test
+    void deleteAnIngredient() {
+        Long testRecipeId = 11L;
+        Long testIngredientId = 3L;
+
+        Optional<Recipe> recipeOptional = Optional.of(new Recipe());
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(testIngredientId);
+
+        recipeOptional.get().setId(testIngredientId);
+        recipeOptional.get().getIngredients().add(ingredient);
+
+        when(mockRecipeRepository.findById(any())).thenReturn(recipeOptional);
+
+        ingredientService.deleteAnIngredient(testRecipeId, testIngredientId);
+        verify(mockRecipeRepository, times(1)).findById(testRecipeId);
+        verify(mockRecipeRepository, times(1)).save(recipeOptional.get());
+
+
+    }
+
 }

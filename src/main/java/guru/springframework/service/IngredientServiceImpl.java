@@ -93,4 +93,37 @@ public class IngredientServiceImpl implements IngredientService{
                         .findFirst().get()
                 );
     }
+
+    @Transactional
+    @Override
+    public void deleteAnIngredient(Long recipeId, Long ingredientId) {
+
+        Recipe recipe;
+
+        //Check recipe of Ingredient is an existing recipe
+        try {
+            recipe = recipeRepository.findById(recipeId).orElseThrow();
+        } catch (NoSuchElementException noElement) {
+            log.error("Recipe Not Found");
+            throw noElement;
+        } catch (Exception e){
+            throw e;
+        }
+
+        recipe.getIngredients().stream().filter(element->element.getId()==ingredientId).findFirst().ifPresentOrElse(
+                //ingredient is an existing ingredient of recipe,remove it
+                (ingredient) -> {
+                    ingredient.setRecipe(null);
+                    recipe.getIngredients().remove(ingredient);
+                },
+                //ingredient is not an existing ingredient, cannot delete
+                () ->{
+                    log.error("Ingredient is not existing ingredient");
+                    throw new NoSuchElementException();
+                }
+        );
+
+        Recipe savedRecipe=recipeRepository.save(recipe);
+
+    }
 }
