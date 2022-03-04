@@ -14,21 +14,40 @@
         <div class="col-sm-8 offset-sm-2">
             <div class="card">
                 <div class="card-header text-white bg-primary">
-                    <p class="card-title" th:text="${recipe.description}">Dish Name</p>
+                    <div class="row">
+                        <div class="col-4 col-lg-2">
+                            <p class="card-title" th:text="${recipe.description}">Dish Name</p>
+                        </div>
+                        <div class="col-6 offset-2 col-lg-2 offset-lg-8">
+                            <a class="btn btn-success" href="#" th:href="@{'/recipe/' + ${recipe.id} +'/image/'}">Change Image</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-auto">
-                            <strong>Categories:</strong>
+                        <div class="col-12 col-md-6">
+                            <div class="row py-1">
+                                <div class="col-auto">
+                                    <strong>Categories:</strong>
+                                </div>
+                                <div class="col-auto">
+                                    <ul>
+                                        <li th:remove="all">Category 1</li>
+                                        <li th:remove="all">Category 2</li>
+                                        <li th:remove="all">Category 3</li>
+                                        <li th:each="category: ${recipe.categories}"
+                                            th:text="'&nbsp' + ${category.description}"/>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-auto">
-                            <ul>
-                                <li th:remove="all">Category 1</li>
-                                <li th:remove="all">Category 2</li>
-                                <li th:remove="all">Category 3</li>
-                                <li th:each="category: ${recipe.categories}"
-                                    th:text="'&nbsp' + ${category.description}"/>
-                            </ul>
+                        <div class="col-12 col-md-6">
+                            <div class="row py-1">
+                                <div class="col-12 col-md-6">
+                                    <img class="img-fluid"src="../../static/images/guacamole400x400WithX.jpg"
+                                         th:src="@{'/recipe/' + ${recipe.id} + '/recipeimage'}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -93,12 +112,12 @@
         <div class="col-sm-8 offset-sm-2">
             <div class="card">
                 <div class="card-header text-white bg-primary">
-                    <div class="row justify-content-between">
+                    <div class="row">
                         <div class="col-4 col-lg-2">
                             <p class="card-title">Ingredients</p>
                         </div>
-                        <div class="col-1">
-                            <a class="btn btn-success" href="#" th:href="@{'/recipe/' + ${recipe.id} +'/ingredients/'}" th:text="View">View</a>
+                        <div class="col-6 offset-2 col-lg-2 offset-lg-8">
+                            <a class="btn btn-success" href="#" th:href="@{'/recipe/' + ${recipe.id} +'/ingredients/'}">View</a>
                         </div>
                     </div>
                 </div>
