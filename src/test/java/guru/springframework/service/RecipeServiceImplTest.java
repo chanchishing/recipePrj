@@ -4,10 +4,12 @@ import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.model.Ingredient;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 //import static org.junit.Assert.*;
 import java.util.*;
 
+import static java.util.Optional.empty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -79,6 +82,22 @@ public class RecipeServiceImplTest {
         assertEquals(testId,optionalRecipe.get().getId());
         assertNotNull(optionalRecipe);
         verify(mockRecipeRepository,times(1)).findById(testId);
+
+
+    }
+
+    @Test
+    void getRecipeNotFound() {
+        Optional<Recipe> emptyRecipeOptional= Optional.empty();
+
+        when(mockRecipeRepository.findById(anyLong())).thenReturn(emptyRecipeOptional);
+
+        NotFoundException thrown = Assertions.assertThrows(NotFoundException.class, () -> {
+            recipeService.getRecipe(testId);
+        });
+
+        Assertions.assertEquals("Recipe not found for id:"+String.valueOf(testId), thrown.getMessage());
+
 
 
     }
