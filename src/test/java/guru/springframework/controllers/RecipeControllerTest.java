@@ -2,8 +2,10 @@ package guru.springframework.controllers;
 
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.model.Recipe;
 import guru.springframework.service.RecipeServiceImpl;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.beans.HasProperty.hasProperty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -74,6 +77,17 @@ class RecipeControllerTest {
         Recipe returnedRecipe = argumentCaptor.getValue();
         assertEquals(testIdLong, returnedRecipe.getId());
 
+    }
+
+    @Test
+    public void getRecipePageRecipeNotFound() throws Exception {
+
+        when(mockRecipeService.getRecipe(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"))
+                .andExpect(model().attributeExists("exception"));
     }
 
     @Test
