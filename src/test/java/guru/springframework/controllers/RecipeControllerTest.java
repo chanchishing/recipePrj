@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.beans.HasProperty.hasProperty;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -87,7 +88,20 @@ class RecipeControllerTest {
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("404error"))
-                .andExpect(model().attributeExists("exception"));
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(model().attribute("exception",is(instanceOf(NotFoundException.class))));
+    }
+
+    @Test
+    public void getRecipeRecipeIdNotNumeric() throws Exception {
+
+        //when(mockRecipeService.getRecipe(any())).thenThrow(NumericException.class);
+
+        mockMvc.perform(get("/recipe/txtId/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"))
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(model().attribute("exception",is(instanceOf(NumberFormatException.class))));
     }
 
     @Test
