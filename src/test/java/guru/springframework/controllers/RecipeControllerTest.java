@@ -50,7 +50,9 @@ class RecipeControllerTest {
 
         testIdStr = "1";
         testIdLong = Long.valueOf(testIdStr);
-        mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(recipeController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
 
     }
 

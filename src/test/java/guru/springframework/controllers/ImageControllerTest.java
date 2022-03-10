@@ -1,6 +1,7 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.model.Recipe;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.service.ImageService;
@@ -44,7 +45,9 @@ class ImageControllerTest {
         closeable = MockitoAnnotations.openMocks(this);
         ImageController imageController = new ImageController(mockRecipeService,mockImageService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(imageController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
 
     }
 
@@ -70,6 +73,28 @@ class ImageControllerTest {
                 .andExpect(model().attribute("recipe",hasProperty("id",is(testRecipeId))));
 
         verify(mockRecipeService, times(1)).getRecipeCommandById(testRecipeId);
+    }
+
+    @Test
+    public void getRecipeRecipeNotFound() throws Exception {
+
+        when(mockRecipeService.getRecipeCommandById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/image"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"))
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(model().attribute("exception",is(instanceOf(NotFoundException.class))));
+    }
+
+    @Test
+    public void getRecipeRecipeIdNotNumeric() throws Exception {
+
+        mockMvc.perform(get("/recipe/txtId/image"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"))
+                .andExpect(model().attributeExists("exception"))
+                .andExpect(model().attribute("exception",is(instanceOf(NumberFormatException.class))));
     }
 
     @Test
