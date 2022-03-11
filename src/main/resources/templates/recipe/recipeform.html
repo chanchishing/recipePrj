@@ -16,6 +16,9 @@
             <input type="hidden" th:field="*{id}"/>
             <input type="hidden" th:field="*{notes.id}"/>
             <div class="col-sm-8 offset-sm-2">
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger my-0">
+                    <p class="my-0">Please Correct Error(s) Below</p>
+                </div>
                 <div class="card">
                     <div class="card-header text-white bg-primary">
                         <p class="card-title">Edit Recipe Information</p>
@@ -26,7 +29,12 @@
                                 <label class="col-form-label">Recipe Description:</label>
                             </div>
                             <div class="col-8 col-lg-9">
-                                <input type="text" class="form-control" th:field="*{description}"/>
+                                <input type="text" class="form-control" th:field="*{description}" th:errorclass="is-invalid"/>
+                                <span class="form-text text-danger" th:if="${#fields.hasErrors('description')}">
+                                    <ul>
+                                        <li th:each="err: ${#fields.errors('description')}" th:text="${err}"/>
+                                    </ul>
+                                </span>
                             </div>
                         <div class="row py-1">
                             <div class="col-4 col-lg-3">

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
@@ -140,12 +141,34 @@ class RecipeControllerTest {
         when(mockRecipeService.saveRecipe(any())).thenReturn(outputCommand);
 
         mockMvc.perform(post("/recipe")
-//                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//                        .param("id",testIdStr)
-//                        .param("description","new description")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id",testIdStr)
+                        .param("description","new description")
+                        .param("directions","some directions")
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/" + testIdStr + "/show/"));
+
+
+    }
+
+    @Test
+    void testPostNewRecipeFormValidationFailed() throws Exception {
+
+
+        RecipeCommand outputCommand = new RecipeCommand();
+        outputCommand.setId(testIdLong);
+
+        when(mockRecipeService.saveRecipe(any())).thenReturn(outputCommand);
+
+        mockMvc.perform(post("/recipe")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id",testIdStr)
+                        .param("prepTime",String.valueOf(10000))
+                )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipe/recipeform"));
 
 
     }
@@ -159,7 +182,7 @@ class RecipeControllerTest {
 
         mockMvc.perform(get("/recipe/" + testIdStr + "/update/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("/recipe/recipeform"))
+                .andExpect(view().name("recipe/recipeform"))
                 .andExpect(model().attributeExists("recipe"));
 
     }
