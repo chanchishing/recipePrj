@@ -10,6 +10,7 @@ import guru.springframework.service.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +55,16 @@ public class RecipeController {
 
     }
 
-
+    @Transactional
     @PostMapping("recipe")
     public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach((error)->log.error(error.toString()));
+
+            if  (command.getId()!=null) {
+                RecipeCommand freshRecipeFromDB = recipeService.getRecipeCommandById(command.getId());
+                command.setIngredients(freshRecipeFromDB.getIngredients());
+            }
 
             return RECIPE_RECIPEFORM_URL;
 

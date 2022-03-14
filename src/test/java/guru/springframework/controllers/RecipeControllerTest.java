@@ -160,6 +160,7 @@ class RecipeControllerTest {
         outputCommand.setId(testIdLong);
 
         when(mockRecipeService.saveRecipe(any())).thenReturn(outputCommand);
+        when(mockRecipeService.getRecipeCommandById(any())).thenReturn(outputCommand);
 
         mockMvc.perform(post("/recipe")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
