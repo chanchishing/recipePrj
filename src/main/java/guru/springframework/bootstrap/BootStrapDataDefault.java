@@ -7,6 +7,7 @@ import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,8 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Component
-public class BootStrapData implements CommandLineRunner {
+@Profile("default")
+public class BootStrapDataDefault implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
     private final CategoryRepository categoryRepository;
@@ -28,7 +30,7 @@ public class BootStrapData implements CommandLineRunner {
     private UnitOfMeasure ounce;
     private UnitOfMeasure pint;
 
-    public BootStrapData(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
+    public BootStrapDataDefault(RecipeRepository recipeRepository, CategoryRepository categoryRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
         this.recipeRepository = recipeRepository;
         this.categoryRepository = categoryRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
@@ -151,7 +153,7 @@ public class BootStrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Started in Bootstrap");
+        log.info("Started in Bootstrap");
         doDBInit();
 
     }
