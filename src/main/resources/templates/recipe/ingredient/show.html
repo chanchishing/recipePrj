@@ -41,8 +41,8 @@
                                 <td th:text="'&nbsp' + ${ingredient.amount.toString()} + ' ' +
                                              ${ingredient.uom.description} + ' ' +
                                              ${ingredient.description}">Ingredients</td>
-                                <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${ingredient.id} +'/update/'}" th:text="Update">Update</a></td>
-                                <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${ingredient.id} +'/delete/'}" th:text="Delete">Delete</a></td>
+                                <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${ingredient.recipeId} + '/ingredients/'+ ${ingredient.id} +'/update/'}" th:text="Update">Update</a></td>
+                                <td><a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${ingredient.recipeId} + '/ingredients/'+ ${ingredient.id} +'/delete/'}" th:text="Delete">Delete</a></td>
                             </tr>
                         </table>
                     </div>
