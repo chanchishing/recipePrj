@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/chanchishing/recipePrj/tree/master.svg?style=svg)](https://circleci.com/gh/chanchishing/recipePrj/tree/master)
 # recipePrj
 This is the Recipe Project of the course that I code along when taking the Udmey course "Spring Framework 5: Beginner to Guru"
 
