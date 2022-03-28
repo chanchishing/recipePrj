@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/chanchishing/recipePrj/tree/master.svg?style=svg)](https://circleci.com/gh/chanchishing/recipePrj/tree/master)
+
+[![codecov](https://codecov.io/gh/chanchishing/recipePrj/branch/master/graph/badge.svg?token=SC1Z8Z1AG0)](https://codecov.io/gh/chanchishing/recipePrj)
 # recipePrj
 This is the Recipe Project of the course that I code along when taking the Udmey course "Spring Framework 5: Beginner to Guru"
 
