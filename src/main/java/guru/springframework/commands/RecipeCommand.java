@@ -10,6 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,9 +44,9 @@ public class RecipeCommand {
     @NotBlank
     private String directions;
 
-    private Set<IngredientCommand> ingredients = new HashSet<>();
+    private ArrayList<IngredientCommand> ingredients = new ArrayList<>();
     private Byte[] image;
     private Difficulty difficulty;
     private NotesCommand notes;
-    private Set<CategoryCommand> categories = new HashSet<>();
+    private ArrayList<CategoryCommand> categories = new ArrayList<>();
 }

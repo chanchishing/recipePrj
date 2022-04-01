@@ -61,10 +61,10 @@ public class RecipeController {
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach((error)->log.error(error.toString()));
 
-            if  (command.getId()!=null) {
-                RecipeCommand freshRecipeFromDB = recipeService.getRecipeCommandById(command.getId());
-                command.setIngredients(freshRecipeFromDB.getIngredients());
-            }
+            //if  (command.getId()!=null) {
+            //    RecipeCommand freshRecipeFromDB = recipeService.getRecipeCommandById(command.getId());
+            //    command.setIngredients(freshRecipeFromDB.getIngredients());
+            //}
 
             return RECIPE_RECIPEFORM_URL;
 
