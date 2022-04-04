@@ -49,6 +49,10 @@
                                         th:text="'&nbsp' + ${category.description}"/>
                                 </ul>
                             </div>
+                            <div th:each="category, idx : ${recipe.categories}">
+                                <input type="hidden" th:field="*{categories[__${idx.index}__].id}"/>
+                                <input type="hidden" th:field="*{categories[__${idx.index}__].description}"/>
+                            </div>
                         </div>
                         <div class="row py-1">
                             <div class="col-12 col-md-6">
