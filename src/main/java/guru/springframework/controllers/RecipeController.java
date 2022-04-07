@@ -55,7 +55,6 @@ public class RecipeController {
 
     }
 
-    @Transactional
     @PostMapping("recipe")
     public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
